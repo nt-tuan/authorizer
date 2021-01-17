@@ -1,0 +1,11 @@
+users:
+  thanhtuan12t@gmail.com:
+    roles:
+      - "blog.admin"
+rules:
+  - path: '^https://api\.phatthanhcafe\.com/blog'
+    methods: ["POST, PUT, DELETE"]
+    role: blog.admin
+  - path: '^https://api\.phatthanhcafe\.com/user'
+    methods: [POST, PUT, DELETE]
+    role: user.admin

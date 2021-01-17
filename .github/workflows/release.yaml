@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE: authorizer
+  DOCKER_REPOSITORY: ghcr.io
+jobs:
+  build:
+    name: Build and push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@master
+      # Build the Docker image
+      - name: Login docker repository
+        run: echo ${{ secrets.CR_PAT }} | docker login $DOCKER_REPOSITORY -u $GITHUB_ACTOR --password-stdin
+      - uses: FranzDiebold/github-env-vars-action@v2
+      # Build the Docker image
+      - name: Build and Push
+        run: |
+          echo "build and push $DOCKER_REPOSITORY/$CI_REPOSITORY_OWNER/$IMAGE:$CI_ACTION_REF_NAME"
+          docker build -t $DOCKER_REPOSITORY/$CI_REPOSITORY_OWNER/$IMAGE:$CI_ACTION_REF_NAME .
+          docker push $DOCKER_REPOSITORY/$CI_REPOSITORY_OWNER/$IMAGE:$CI_ACTION_REF_NAME

@@ -1,0 +1,11 @@
+version: "3"
+services:
+  authorizer:
+    ports:
+      - 5001:5000
+    build: .
+    restart: always
+    volumes:
+      - ./config.yaml:/config.yaml
+    environment:
+      CLIENT_ID: 526352576397-2rpla1a7j2058c1sc2ri318vfomp5lvt.apps.googleusercontent.com
