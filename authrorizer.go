@@ -77,19 +77,19 @@ func (a Authorizer) getMatchRule(method string, requestURI string) (*Rule, error
 
 // Authorize a request
 func (a Authorizer) Authorize(token string, method string, requestURI string) (bool, *oauth2.Tokeninfo, error) {
-	tokenInfo, err := verifyIDToken(token)
-	if err != nil {
-		return false, nil, err
-	}
-	if !tokenInfo.VerifiedEmail {
-		return false, nil, err
-	}
 	matchRule, err := a.getMatchRule(method, requestURI)
 	if err != nil {
 		return false, nil, err
 	}
 	if matchRule == nil {
-		return true, tokenInfo, nil
+		return true, nil, nil
+	}
+	tokenInfo, err := verifyIDToken(token)
+	if err != nil {
+		return false, nil, err
+	}
+	if !tokenInfo.VerifiedEmail {
+		return false, nil, errors.New("email is not verified")
 	}
 	if matchRule.Role == "" {
 		return true, tokenInfo, nil
